@@ -1,3 +1,4 @@
+#define DEBUG
 #include <CapacitiveSensor.h>
 #include <Timer.h>
 #define TRIGGER_VAL 220
@@ -6,11 +7,11 @@
 #define LED_PIN 9
 #define LONG_PRESS_MILLIS 200
 
-CapacitiveSensor   capSens = CapacitiveSensor(SEND_PIN, RECV_PIN);        // 1M resistor between pins 4 & 2, pin 2 is sensor pin, add a wire and or foil
+CapacitiveSensor capSens = CapacitiveSensor(SEND_PIN, RECV_PIN);        // 1M resistor between pins 4 & 2, pin 2 is sensor pin, add a wire and or foil
 bool isPressed = false;
 bool state = false;
 int brightness = 0;    // how bright the LED is
-int fadeAmount = 1;    // how many points to fade the LED by
+int fadeAmount = 5;    // how many points to fade the LED by
 unsigned long pressedDelta = 0;
 
 void setup() {
@@ -66,5 +67,5 @@ void fade(){
     fadeAmount *= (brightness < 0 ? (fadeAmount < 0 ? -1 : 1) : (fadeAmount > 0 ? -1 : 1));
     brightness  = brightness < 0 ? 0 : 255;   
   }
-  delay(20);  
+  delay(50);  
 }
