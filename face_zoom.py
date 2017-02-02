@@ -11,18 +11,28 @@ num = 100
 face_cascade = cv2.CascadeClassifier(casc_path)
 image = cv2.imread(img_path)
 gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+font = cv2.FONT_HERSHEY_SIMPLEX
+color = (0, 255, 0)
 
 faces = face_cascade.detectMultiScale(gray, 1.3, 5)
 
 print("Found {} faces".format(len(faces)))
 show_image = np.copy(image)
-for j, (x, y, w, h) in enumerate(faces):
+for i, (x, y, w, h) in enumerate(faces):
+    cv2.rectangle(show_image, (x,y), (x+w,y+h), color, 2)
+    cv2.putText(show_image, "Face {}".format(i), (x,y+h), font, 1, (255,255,0), 2)
+
+cv2.imshow("Faces", show_image)
+cv2.waitKey(0)
+choice = input("Select faces (seperate by comma):")
+choice = [int(x.strip()) for x in choice.split(',') if x.strip().isdigit()]
+
+for j in choice::
+    x, y, w, h = faces[j]
     folder_path = path.join("./", path.splitext(path.basename(img_path))[0], str(j))
     print(folder_path)
     makedirs(folder_path)
     tmp = np.copy(image)
-    color = (0, 255, 0)
-    cv2.rectangle(show_image, (x,y), (x+w,y+h), color, 2)
     top_x = np.linspace(0, x, num)
     top_y = np.linspace(0, y, num)
     bot_x = np.linspace(image.shape[1], x+w, num)
@@ -37,6 +47,3 @@ for j, (x, y, w, h) in enumerate(faces):
         cv2.imwrite(
                 path_1,
                 image[int(top_y[i]):int(bot_y[i]), int(top_x[i]):int(bot_x[i])])
-
-cv2.imshow("Faces", show_image)
-cv2.waitKey(0)
